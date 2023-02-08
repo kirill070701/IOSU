@@ -12,29 +12,20 @@
     <script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script src="/js/script.js"></script>
-    <div class="fon">
-        <div class="ball"></div>
-
+    <div class="settings">
+        <p>Амплитуда</p>
+        <input type="number" name="" id="amplitude">
+        <p>Скорость</p>
+        <input type="number" name="" id="speed">
     </div>
-    <script>
-    const socket = io()
-
-    socket.on('connect', () => {
-        console.log('Подключение установлено');
-    })
-
-    // получаем данные от сервера
-    socket.on('hello', (counter) => {
-        console.log(`Привет - ${counter}`)
-    })
-
-    // отправляем данные на сервер
-    /*let counter = 0
-    setInterval(() => {
-        ++counter
-        socket.emit('hi', { counter })
-    }, 1000)*/
     
-    </script>
+    <div class="result">
+        <div class="fon">
+            <div class="ball"></div>
+    
+        </div>
+    </div>
+    
+    <script src="/js/socket.js"></script>
 </body>
 </html>
