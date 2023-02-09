@@ -1,3 +1,5 @@
+"use strict";
+
 const socket = io()
 /*s
     socket.on('connect', () => {

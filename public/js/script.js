@@ -1,26 +1,55 @@
-let positionFon
-let sizeFon
+"use strict";
+
 $(document).ready(function() {
-
-	//$('.ball').offset({top: 100})
-    //$('.ball').css({'top': '50%'})
-
-    positionFon = getPositionObject($('.fon'));
-    sizeFon = getSizeObject($('.fon'));
-    //positionFon.top += (sizeFon.height / 2)-25
-    //setPositionObject($('.ball'), positionFon);
-    let sinPosition = sinPositionObject();
-    setPositionObject($('.ball'), sinPosition, positionFon);
-
-
-    
+    $('.startSin').on('click',()=>{
+        let coefficients    = new Сoefficients();
+        let sizeFon         = getSizeObject($('.fon'));
+        let sinPosition     = sinPositionObject(sizeFon, coefficients);
+        setPositionObject($('.ball'), sinPosition, coefficients);
+        console.log(coefficients);
+    })
 });
+/* конторль значений */
+function controlPosition(posY, coefficients) {
+    let min = getPositionObject($('.fon')).top
+    let maxAcceptable = (min / (coefficients.max - coefficients.min)) * Math.abs(coefficients.maxAcceptable)
+    let minAcceptable = (min / (coefficients.max - coefficients.min)) * (Math.abs(coefficients.maxAcceptable) + Math.abs(coefficients.minAcceptable))
 
+    console.log(posY)
+    console.log(maxAcceptable)
+    console.log(minAcceptable)
+
+    if (posY >= maxAcceptable || posY <= minAcceptable) {
+        $('.ball').css({background: 'green'})
+        console.log('ok')
+    }else{
+        $('.ball').css({background: 'red'})
+        console.log('no')
+    }
+}
+
+/*констроктор вводимых данных */
+function Сoefficients() {
+    this.frequency          = parseFloat(getDataInput($('#frequency')));
+    this.speed              = parseFloat(getDataInput($('#speed')));
+    this.max                = parseFloat(getDataInput($('#max')));
+    this.min                = parseFloat(getDataInput($('#min')));
+    this.maxAcceptable      = parseFloat(getDataInput($('#maxAcceptable')));
+    this.minAcceptable      = parseFloat(getDataInput($('#minAcceptable')));
+}
+
+/* получение значений ввода*/
+function getDataInput(objectInput){
+    let data = objectInput.val();
+    return data;
+}
+
+/*Получение позиции объекта */
 function getPositionObject(object){
     let position = object.offset();
     return(position);
 }
-
+/* Получение размера объекта */
 function getSizeObject(object){
     let size = {
         width: object.width(), 
@@ -28,49 +57,63 @@ function getSizeObject(object){
     }
     return(size);
 }
-function setPositionObject(object, sinPosition, positionFon){
-    let p = 0;
+
+/* Изминение позиции объекта */
+function setPositionObject(object, sinPosition, coefficients){
+    let posX = 0;
+    let speed = coefficients.speed
+    let min = getPositionObject($('.fon')).top
+    let maxAcceptable = (min / (coefficients.max - coefficients.min)) * Math.abs(coefficients.maxAcceptable)
+    let minAcceptable = (min / (coefficients.max - coefficients.min)) * (Math.abs(coefficients.maxAcceptable) + Math.abs(coefficients.minAcceptable))
+
+    console.log(maxAcceptable)
+    console.log(minAcceptable)
     for (let i = 0; i < sinPosition.length; i++) {
+        if (/*sinPosition[i] >= maxAcceptable ||*/ sinPosition[i] <= minAcceptable) {
             object.animate({
                 top: sinPosition[i]+'px',
-                left: p + 'px'
-            },20)  
-            console.log(sinPosition[i]+'px')  
-        
-        p += 0.5;
+                left: posX + 'px'
+            },20);
+            $('.ball').css({background: 'green'})
+            console.log(sinPosition[i])
+        }else{
+            object.animate({
+                top: sinPosition[i]+'px',
+                left: posX + 'px'
+            },20);
+            $('.ball').css({background: 'red'})
+            console.log('no')
+        }
+
+        /*    object.animate({
+                top: sinPosition[i]+'px',
+                left: posX + 'px'
+            },20);  */
+        posX += speed; //1.95
+        //controlPosition(sinPosition[i], coefficients)
     }
-
-    
-    /*object.offset({
-        top: Math.abs(sinPosition),
-        left: 100
-    } );*/
 }
 
+/* изминение размера объекта */
 function setSizeObject(object, width, height){
-    object.width(width), 
-    object.height(height)
+    object.width(width); 
+    object.height(height);
 }
-function sinPositionObject(){
+
+/* Расчет позиций объекта */
+function sinPositionObject(sizeFon, coefficients){
     let a       = sizeFon.height/2-25;
     let t       = 1.0;
-    let cik     = 0.055;
+    let cik     = coefficients.frequency; //частота 0.055                    скорость 1.95
     let faza    = 1;
 
     let positionObject = [];
 
-    for (let i = 0; i < (sizeFon.width / 0.5); i++) {
+    for (let i = 0; i < ((sizeFon.width / coefficients.speed)-(50 / coefficients.speed)); i++) {
         positionObject[i] = (a * Math.cos(cik * t - faza)) + sizeFon.height/2-25;
         t += 0.5;
     }
-    console.log(positionObject)
+
     return(positionObject);   
 }
-
-
-
-
-function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-  }
   

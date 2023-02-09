@@ -13,16 +13,36 @@
     <script src="/socket.io/socket.io.js"></script>
     <script src="/js/script.js"></script>
     <div class="settings">
-        <p>Амплитуда</p>
-        <input type="number" name="" id="amplitude">
-        <p>Скорость</p>
-        <input type="number" name="" id="speed">
+        <div>
+            <p>Частота</p>
+            <input type="number" name="" id="frequency">
+        </div>
+        <div>
+            <p>Скорость</p>
+            <input type="number" name="" id="speed">
+        </div>
+        <div>
+            <p>max</p>
+            <input type="number" name="" id="max">
+        </div>
+        <div>
+            <p>min</p>
+            <input type="number" name="" id="min">
+        </div>
+        <div>
+            <p>max Допустимое</p>
+            <input type="number" name="" id="maxAcceptable">
+        </div>
+        <div>
+            <p>min Допустимое</p>
+            <input type="number" name="" id="minAcceptable">
+        </div>
+        <button class="startSin">Start</button>
     </div>
     
     <div class="result">
         <div class="fon">
             <div class="ball"></div>
-    
         </div>
     </div>
     
