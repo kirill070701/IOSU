@@ -62,36 +62,31 @@ function getSizeObject(object){
 function setPositionObject(object, sinPosition, coefficients){
     let posX = 0;
     let speed = coefficients.speed
+
     let min = getPositionObject($('.fon')).top
     let maxAcceptable = (min / (coefficients.max - coefficients.min)) * Math.abs(coefficients.maxAcceptable)
     let minAcceptable = (min / (coefficients.max - coefficients.min)) * (Math.abs(coefficients.maxAcceptable) + Math.abs(coefficients.minAcceptable))
 
     console.log(maxAcceptable)
-    console.log(minAcceptable)
-    for (let i = 0; i < sinPosition.length; i++) {
-        if (/*sinPosition[i] >= maxAcceptable ||*/ sinPosition[i] <= minAcceptable) {
-            object.animate({
-                top: sinPosition[i]+'px',
-                left: posX + 'px'
-            },20);
-            $('.ball').css({background: 'green'})
-            console.log(sinPosition[i])
-        }else{
-            object.animate({
-                top: sinPosition[i]+'px',
-                left: posX + 'px'
-            },20);
-            $('.ball').css({background: 'red'})
-            console.log('no')
-        }
 
-        /*    object.animate({
-                top: sinPosition[i]+'px',
-                left: posX + 'px'
-            },20);  */
+    for (let i = 0; i < sinPosition.length; i++) {
+        object.animate({
+            top: sinPosition[i]+'px',
+            left: posX + 'px'
+        },20, 'linear', ()=>{
+            if ((sinPosition[i] <= maxAcceptable) || (sinPosition[i] >= minAcceptable)) {
+                $('.ball').css({background: 'red'})
+                console.log('ok')
+            }else{
+                $('.ball').css({background: 'blue'})
+                console.log('no')
+            }
+            
+        });  
         posX += speed; //1.95
         //controlPosition(sinPosition[i], coefficients)
     }
+    
 }
 
 /* изминение размера объекта */
